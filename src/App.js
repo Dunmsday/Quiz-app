@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./index.css";
 import data from "./data";
 import Quiz from "./Quiz";
@@ -12,7 +12,7 @@ function App() {
   // The countdown useState
   const [countdown, setCountdown] = useState(null);
   // The fetch data from data.js
-  const [questions, setQuestions] = useState(data);
+  const [questions] = useState(data);
   const [score, setScore] = useState(null); // <-- store score here
   // To display score at the end of the quiz
   const [scoreDisplay, setScoreDisplay] = useState(false);
