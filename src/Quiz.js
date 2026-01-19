@@ -10,12 +10,13 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
 
   // i created a useState that will show thed correction after the quiz is submited
   const [showCorrection, setShowCorrection] = useState(false);
+  const correctAnswer = questions[present].answer;
+  const [timerActive, setTimerActive] = useState(true);
 
   // Timer
   const [quizTime, setQuizTime] = useState(1200);
-
   useEffect(() => {
-    if (showCorrection) return;
+    if (!timerActive) return;
     const timer = setInterval(() => {
       setQuizTime((prev) => {
         if (prev === 0) {
@@ -28,7 +29,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [timerActive]);
 
   // For min and sec
   const formatTime = (time) => {
@@ -70,11 +71,16 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
     setScore(newScore);
     setShowCorrection(true);
     setScoreDisplay(true);
+    setTimerActive(false);
   };
   return (
     <>
       <div className="question">
-        <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
+        {timerActive ? (
+          <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
+        ) : (
+          <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
+        )}
         <h2 style={{ marginBottom: "30px" }}>
           {questions[present].id}. {questions[present].question}
         </h2>
@@ -117,6 +123,13 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
             </div>
           );
         })}
+        <br />
+        {showCorrection && (
+          <h4>
+            <span style={{ color: "red" }}>Ans:</span>{" "}
+            {questions[present].options[correctAnswer]}
+          </h4>
+        )}
         <div className="question-btn">
           {showPrevBtn ? (
             <button className="btn-submit" onClick={() => prevQuestion()}>
@@ -142,6 +155,8 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
                 setPresent(0);
                 setShowCorrection(false);
                 setScoreDisplay(false);
+                setTimerActive(true);
+                setQuizTime(1200);
               }}
             >
               Try Quiz again
