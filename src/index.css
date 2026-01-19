@@ -187,6 +187,13 @@ section {
 .correct {
   background-color: green;
 }
+.timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: #b71c1c;
+  margin-bottom: 20px;
+}
+
 /* For devices with max width 600px (phones) */
 @media screen and (max-width: 600px) {
   /* Put your phone-specific CSS here */
