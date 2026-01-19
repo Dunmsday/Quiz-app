@@ -122,6 +122,10 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
             </button>
           )}
         </div>
+        <br />
+        <p style={{ textAlign: "end" }}>
+          {present + 1}/{questions.length}
+        </p>
       </div>
     </>
   );
