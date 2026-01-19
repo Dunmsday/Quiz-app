@@ -42,6 +42,7 @@ function App() {
     setCountdown("Loading..");
     await sleep(500);
     setCountdown("Loading...");
+    await sleep(500);
 
     running.current = false;
     // I set the quizStart to false to hide display
@@ -55,7 +56,7 @@ function App() {
           <div className="before-quiz-start">
             <h1>Are you ready to try out a Quiz?</h1>
             <h2 style={{ color: "red" }}>{countdown}</h2>
-            <button className="btn" onClick={() => startCountdown(10)}>
+            <button className="btn" onClick={() => startCountdown(5)}>
               start quiz
             </button>
           </div>
