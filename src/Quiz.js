@@ -15,28 +15,6 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
 
   // Timer
   const [quizTime, setQuizTime] = useState(1200);
-  useEffect(() => {
-    if (!timerActive) return;
-    const timer = setInterval(() => {
-      setQuizTime((prev) => {
-        if (prev === 0) {
-          clearInterval(timer);
-          totalScore();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timerActive]);
-
-  // For min and sec
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}: ${seconds < 10 ? "0" : ""}${seconds}`;
-  };
   // An handleSelect func that handles the onclick selected div and also stores the selected div key in the selectedAnswer object
   const handleSelect = (option) => {
     setSelectedAnswer({
@@ -72,6 +50,28 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
     setShowCorrection(true);
     setScoreDisplay(true);
     setTimerActive(false);
+  };
+  useEffect(() => {
+    if (!timerActive) return;
+    const timer = setInterval(() => {
+      setQuizTime((prev) => {
+        if (prev <= 0) {
+          clearInterval(timer);
+          totalScore();
+          return 0;
+        }
+
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timerActive, totalScore]);
+
+  // For min and sec
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}: ${seconds < 10 ? "0" : ""}${seconds}`;
   };
   return (
     <>
