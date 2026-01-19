@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // Quiz component
 // I destructed the components passed in App.js {questions, setScore, setScoreDisplay}
 function Quiz({ questions, setScore, setScoreDisplay }) {
@@ -11,6 +11,31 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
   // i created a useState that will show thed correction after the quiz is submited
   const [showCorrection, setShowCorrection] = useState(false);
 
+  // Timer
+  const [quizTime, setQuizTime] = useState(1200);
+
+  useEffect(() => {
+    if (showCorrection) return;
+    const timer = setInterval(() => {
+      setQuizTime((prev) => {
+        if (prev === 0) {
+          clearInterval(timer);
+          totalScore();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // For min and sec
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}: ${seconds < 10 ? "0" : ""}${seconds}`;
+  };
   // An handleSelect func that handles the onclick selected div and also stores the selected div key in the selectedAnswer object
   const handleSelect = (option) => {
     setSelectedAnswer({
@@ -49,6 +74,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
   return (
     <>
       <div className="question">
+        <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
         <h2 style={{ marginBottom: "30px" }}>
           {questions[present].id}. {questions[present].question}
         </h2>
