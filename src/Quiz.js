@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // Quiz component
 // I destructed the components passed in App.js {questions, setScore, setScoreDisplay}
 function Quiz({ questions, setScore, setScoreDisplay }) {
@@ -29,14 +29,14 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
 
   //Next btn func
   const nextQuestion = () => {
-    return setPresent((prev) => prev + 1);
+    return setPresent((next) => next + 1);
   };
   // PrevBtn func
-  const prevQuestion = () => setPresent((prev) => prev - 1);
+  const prevQuestion = () => setPresent((previous) => previous - 1);
 
   // A func that calculates the total score and setShowCorrection and scoreDisplay to be true
   // This func only runs when the submit tn is clicked
-  const totalScore = () => {
+  const totalScore = useCallback(() => {
     let score = 0;
     // I used a loop so has to calculated all the selectedAnswer
     for (let i = 0; i < questions.length; i++) {
@@ -50,7 +50,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
     setShowCorrection(true);
     setScoreDisplay(true);
     setTimerActive(false);
-  };
+  }, [questions, selectedAnswer, setScore, setScoreDisplay]);
   useEffect(() => {
     if (!timerActive) return;
     const timer = setInterval(() => {
@@ -137,7 +137,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
             </button>
           ) : null}
           {!showSubmitBtn ? (
-            <button className="btn-submit" onClick={() => nextQuestion()}>
+            <button className="btn-submit" onClick={nextQuestion}>
               Next
             </button>
           ) : null}
