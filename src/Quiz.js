@@ -14,7 +14,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
   const [timerActive, setTimerActive] = useState(true);
 
   // Timer
-  const [quizTime, setQuizTime] = useState(1200);
+  const [quizTime, setQuizTime] = useState(10);
   // An handleSelect func that handles the onclick selected div and also stores the selected div key in the selectedAnswer object
   const handleSelect = (option) => {
     setSelectedAnswer({
@@ -57,7 +57,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
       setQuizTime((prev) => {
         if (prev <= 0) {
           clearInterval(timer);
-          totalScore();
+          setTimerActive(false);
           return 0;
         }
 
@@ -65,8 +65,12 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [timerActive, totalScore]);
-
+  }, [timerActive]);
+  useEffect(() => {
+    if (quizTime === 0) {
+      totalScore();
+    }
+  }, [quizTime, totalScore]);
   // For min and sec
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
