@@ -14,7 +14,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
   const [timerActive, setTimerActive] = useState(true);
 
   // Timer
-  const [quizTime, setQuizTime] = useState(10);
+  const [quizTime, setQuizTime] = useState(1200);
   // An handleSelect func that handles the onclick selected div and also stores the selected div key in the selectedAnswer object
   const handleSelect = (option) => {
     setSelectedAnswer({
