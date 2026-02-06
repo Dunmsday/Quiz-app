@@ -12,6 +12,7 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
   const [showCorrection, setShowCorrection] = useState(false);
   const correctAnswer = questions[present].answer;
   const [timerActive, setTimerActive] = useState(true);
+  console.log(questions);
 
   // Timer
   const [quizTime, setQuizTime] = useState(1200);
@@ -77,14 +78,26 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
     const seconds = Math.floor(time % 60);
     return `${minutes}: ${seconds < 10 ? "0" : ""}${seconds}`;
   };
+  const mainWidth = 150;
+  const bar = Object.keys(selectedAnswer).length;
+  const width = (bar / questions.length) * mainWidth;
+  console.log(mainWidth, bar, width);
+
   return (
     <>
       <div className="question">
-        {timerActive ? (
-          <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
-        ) : (
-          <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
-        )}
+        <div className="progress-bar">
+          <div className="time-main">
+            {timerActive ? (
+              <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
+            ) : (
+              <div className="timer">⏱ Time Left: {formatTime(quizTime)}</div>
+            )}
+          </div>
+          <div className="progress" style={{ width: `${mainWidth}px` }}>
+            <span className="how-far" style={{ width: `${width}px` }}></span>
+          </div>
+        </div>
         <h2 style={{ marginBottom: "30px" }}>
           {questions[present].id}. {questions[present].question}
         </h2>
@@ -171,6 +184,35 @@ function Quiz({ questions, setScore, setScoreDisplay }) {
         <p style={{ textAlign: "end" }}>
           {present + 1}/{questions.length}
         </p>
+      </div>
+      <div className="answered-question">
+        {questions.map((question) => {
+          const yes = Object.keys(selectedAnswer);
+          const id = question.id - 1;
+          // const newYes = yes[id] == id;
+          let bgColor = "white";
+          for (let i = 0; i < yes.length; i++) {
+            if (yes[i] === id) {
+              bgColor = "blue";
+            }
+          }
+          // const newYes = yes.contains(question.id);
+          console.log(yes, yes[id]);
+
+          return (
+            <>
+              <button
+                style={{ background: bgColor }}
+                className="individual-answered-question"
+                onClick={() => {
+                  setPresent(question.id - 1);
+                }}
+              >
+                {question.id}
+              </button>
+            </>
+          );
+        })}
       </div>
     </>
   );
